@@ -42,17 +42,27 @@ detSum matrix i | length matrix == 1 = fromIntegral $ matrix !! 0 !! 0
                     where
                        currentSumElement = getDetSumElement matrix i
 
--- This just starts the recursive sum
-det :: Matrix -> Int
-det matrix = detSum matrix 0
+matrixIsSquare :: Matrix -> Int -> Bool
+matrixIsSquare matrix i | i >= length matrix = True
+                        | otherwise = length matrix == length (matrix !! i)
+                            && matrixIsSquare matrix (i + 1)
 
--- TODO: Add validation for square matrix
+matrixIsValid :: Matrix -> Bool
+matrixIsValid matrix = matrixIsSquare matrix 0
+
+-- This just starts the recursive sum
+det :: Matrix -> Maybe Int
+det matrix | not $ matrixIsValid matrix = error "matrix is not square!"
+           | otherwise = Just $ detSum matrix 0
+
 -- The program calculates the determinant of the matrix with size n by
 -- using the formula that sums Aij * aij * (-1)^(i + j),
 -- where j goes from 1 to n and i is some number from 1 to n that
 -- remains the same for all elements of the sum.
 -- This program makes it work by having i always be 0 and
 -- therefore always the first row's elements are used.
-mat = [[1, 3], [5, -2]]
-main = print $ det mat
+mat = [[3, 4, 6], [5, 3, 3], [6, 7, 8]]
+main = case det mat of
+           Just d -> print d
+           Nothing -> print "There was an error calculating the determinant!"
 
