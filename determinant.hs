@@ -22,6 +22,7 @@ getDetSumElement matrix i = sign * element * detSum restOfTheMatrix 0
         -- so we always use i + 1. On the other hand in this program
         -- i is always from 0 to n - 1, so we need (i + 1) + 1, which
         -- equals i + 2. Therefore the sign is -1 on power of i + 2.
+        -- It is equal to -1 on power of i.
         sign = (-1) ^ i
         element = fromIntegral $ matrix !! 0 !! i
         matrixWithoutFirstRow = tail matrix
