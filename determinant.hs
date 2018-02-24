@@ -12,14 +12,8 @@ removeCol row i = headOfRow ++ tailOfRow
 
 -- Remove col i from all rows of the matrix
 removeCols :: Matrix -> Int -> Matrix
-removeCols [] i = []
+removeCols [] _ = []
 removeCols (x:xs) i = removeCol x i : removeCols xs i
-
--- We always remove the first row in this program, so
--- there is no need to make the function use a parameter
--- in order to determine which row to remove
-removeFirstRow :: Matrix -> Matrix
-removeFirstRow (x:xs) = xs
 
 -- Calculate one element from the sum of the matrix
 getDetSumElement :: Matrix -> Int -> Int
@@ -32,7 +26,7 @@ getDetSumElement matrix i = sign * element * detSum restOfTheMatrix 0
         -- equals i + 2. Therefore the sign is -1 on power of i + 2.
         sign = (-1) ^ (i + 2)
         element = fromIntegral $ matrix !! 0 !! i
-        matrixWithoutFirstRow = removeFirstRow matrix
+        matrixWithoutFirstRow = tail matrix
         restOfTheMatrix = removeCols matrixWithoutFirstRow i
 
 detSum :: Matrix -> Int -> Int
@@ -51,8 +45,10 @@ isValid matrix = isSquare matrix (length matrix)
 
 -- This just starts the recursive sum
 det :: Matrix -> Maybe Int
-det matrix | not $ isValid matrix = error "matrix is not square!"
+det matrix | notValid matrix = Nothing
            | otherwise = Just $ detSum matrix 0
+         where
+             notValid = not . isValid
 
 -- The program calculates the determinant of the matrix with size n by
 -- using the formula that sums Aij * aij * (-1)^(i + j),
@@ -63,5 +59,5 @@ det matrix | not $ isValid matrix = error "matrix is not square!"
 mat = [[3, 4, 6], [5, 3, 3], [6, 7, 8]]
 main = case det mat of
            Just d  -> print d
-           Nothing -> print "There was an error calculating the determinant!"
+           Nothing -> putStrLn "There was an error calculating the determinant!"
 
