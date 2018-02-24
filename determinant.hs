@@ -3,10 +3,8 @@ type Matrix = [Row]
 
 -- Remove col i from the passed row
 removeCol :: Row -> Int -> Row
-removeCol row i = headOfRow ++ tailOfRow
-    where
-        headOfRow = take i row
-        tailOfRow = drop (i + 1) row
+removeCol (_:rs) 0 = rs
+removeCol (r:rs) i = r : removeCol rs (i - 1)
 
 -- Remove col i from all rows of the matrix
 removeCols :: Matrix -> Int -> Matrix
