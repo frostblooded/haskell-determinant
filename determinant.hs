@@ -1,5 +1,3 @@
-import Debug.Trace
-
 type Row = [Integer]
 type Matrix = [Row]
 
@@ -24,17 +22,18 @@ getDetSumElement matrix i = sign * element * detSum restOfTheMatrix 0
         -- so we always use i + 1. On the other hand in this program
         -- i is always from 0 to n - 1, so we need (i + 1) + 1, which
         -- equals i + 2. Therefore the sign is -1 on power of i + 2.
-        sign = (-1) ^ (i + 2)
+        sign = (-1) ^ i
         element = fromIntegral $ matrix !! 0 !! i
         matrixWithoutFirstRow = tail matrix
         restOfTheMatrix = removeCols matrixWithoutFirstRow i
 
 detSum :: Matrix -> Int -> Int
-detSum matrix i | length matrix == 1 = fromIntegral $ matrix !! 0 !! 0
-                | length matrix == i = 0
+detSum matrix i | len == 1 = fromIntegral $ matrix !! 0 !! 0
+                | len == i = 0
                 | otherwise = currentSumElement + detSum matrix (i + 1)
                     where
                        currentSumElement = getDetSumElement matrix i
+                       len = length matrix
 
 isSquare :: Matrix -> Int -> Bool
 isSquare [] _ = True
